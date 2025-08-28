@@ -4,8 +4,9 @@ import {request} from './components/Api.js'
 
 export default function App($app) {
 
+
   this.state = {
-    currentTab: 'all',
+    currentTab: window.location.pathname.replace('/v2/', '') || 'all',
     photos: [],
   };
 
@@ -13,11 +14,8 @@ export default function App($app) {
     $app,
     initialState: '',
     onClick: async (name) => {
-      this.setState({
-        ...this.state,
-        currentTab: name,
-        photos: await request(name == 'all' ? '' : name),
-      });
+      history.pushState(null, `${name} 사진`, `/v2/${name}`)
+      this.updateContent(name);
     }
   });
   const content = new Content({$app, initialState: []});
@@ -28,16 +26,22 @@ export default function App($app) {
     content.setState(this.state.photos);
   };
 
+  this.updateContent = async (tabName) => {
+    console.log(tabName);
+    const currentTab = tabName === 'all' ? '' : tabName;
+    const photos = await request(currentTab);
+    this.setState({
+      ...this.state,
+      currentTab: tabName,
+      photos: photos,
+    });
+  }
+  window.addEventListener('popstate', () => {
+    this.updateContent(window.location.pathname.replace('/v2/', '') || 'all');
+  });
+
   const init = async () => {
-    try {
-      const initialPhotos = await request();
-      this.setState({
-        ...this.state,
-        photos: initialPhotos,
-      });
-    }catch(err) {
-      console.log(err);
-    }
+    this.updateContent(this.state.currentTab);
   }
 
   init();
