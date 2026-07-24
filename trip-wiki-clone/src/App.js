@@ -6,15 +6,26 @@ import CityList from "./components/CityList.js";
 export default function App($app) {
   let state = {
     currentPage: "/",
+    region: "All",
     cities: [],
   };
 
   const render = () => {
+    const { currentPage, cities } = state;
+
     $app.innerHTML = "";
 
-    Header({ $app, initialState: {} });
-    RegionList({ $app, initialState: {} });
-    CityList({ $app, initialState: state.cities });
+    Header({ $app, initState: { currentPage } });
+    RegionList({
+      $app,
+      initState: {},
+      handleRegion: async (region) => {
+        history.pushState(null, null, `/${region}`);
+        state.region = region;
+        render();
+      },
+    });
+    CityList({ $app, initState: cities });
   };
 
   $app.addEventListener("click", (e) => {

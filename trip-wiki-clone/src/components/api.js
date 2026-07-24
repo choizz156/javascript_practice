@@ -6,6 +6,7 @@ export const requestCities = async () => {
 
     if (res.ok) {
       const data = await res.json();
+      console.log(data);
       return data;
     }
   } catch (error) {
