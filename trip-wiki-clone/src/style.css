@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Trip Wiki Clone</title>
+    <!-- 글씨체를 예쁘게 만들어주는 구글 폰트입니다 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@100..900&display=swap" rel="stylesheet" />
+    
+    <!-- 방금 우리가 비워둔 빈 디자인(CSS) 파일을 연결합니다 -->
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <!-- 앞으로 우리의 자바스크립트가 그림을 그려넣을 빈 도화지입니다 -->
+    <div id="app"></div>
+    
+    <!-- 방금 이름을 바꾼 우리의 진짜 자바스크립트 파일(index.js)을 연결합니다 -->
+    <script type="module" src="/src/index.js"></script>
+  </body>
+</html>
