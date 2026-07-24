@@ -46,6 +46,14 @@ export default function CityList($app) {
 
       render(); // 데이터가 변경되었으니 화면을 갱신!
     }
+
+    if (e.target.className === "del-btn") {
+      const clickedName = e.target.dataset.name;
+      // [filter 메서드 활용] 
+      // 클릭된 도시와 이름이 '다른' 요소들만 남긴 새로운 배열을 생성합니다. (삭제 효과)
+      state = state.filter((item) => item.name !== clickedName);
+      render();
+    }
   });
 
   // 4. 새로운 폼 추가 이벤트
@@ -55,8 +63,9 @@ export default function CityList($app) {
     if (e.target.id === "add-form") {
       const inputValue = document.querySelector("#new-city").value;
       if (inputValue.trim() !== "") {
-        // state에 새 데이터를 넣고 화면 갱신
-        state.push({ name: inputValue, score: 0 });
+        // [전개 연산자(...) 활용] 불변성(Immutability) 유지
+        // 기존 원본 배열 상자(state)를 훼손하지 않고, 내용물만 복사해온 뒤 새 객체를 덧붙인 '완전히 새로운 상자'로 교체합니다!
+        state = [...state, { name: inputValue, score: 0 }];
         render();
       }
     }
