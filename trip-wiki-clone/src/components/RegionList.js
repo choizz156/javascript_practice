@@ -24,11 +24,11 @@ export default function RegionList({ $app, initState, handleRegion }) {
       })
       .join("");
 
-    $app.innerHTML += `
+    $app.insertAdjacentHTML("beforeend", `
       <nav class="region-list">
         ${regionButtons}
       </nav>
-    `;
+    `);
   };
 
 

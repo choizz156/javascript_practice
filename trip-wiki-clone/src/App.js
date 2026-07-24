@@ -8,21 +8,36 @@ export default function App($app) {
     currentPage: "/",
     region: "All",
     cities: [],
+    sortBy: "total",
+    searchWord: "",
   };
 
   const render = () => {
-    const { currentPage, cities } = state;
+    const { currentPage, cities, sortBy, searchWord } = state;
 
     $app.innerHTML = "";
 
-    Header({ $app, initState: { currentPage } });
+    Header({
+      $app,
+      initState: { currentPage, sortBy, searchWord },
+      handleSortChange: async (newSort) => {
+        state.sortBy = newSort;
+        state.cities = await requestCities(state.region, state.sortBy, state.searchWord);
+        render();
+      },
+      handleSearch: async (newSearch) => {
+        state.searchWord = newSearch;
+        state.cities = await requestCities(state.region, state.sortBy, state.searchWord);
+        render();
+      }
+    });
     RegionList({
       $app,
       initState: state.region,
       handleRegion: async (region) => {
         history.pushState(null, null, `/${region}`);
         state.region = region;
-        state.cities =  await requestCities(state.region)
+        state.cities = await requestCities(state.region);
         render();
       },
     });

@@ -2,7 +2,7 @@ export default function CityList({ $app, initState }) {
   let state = initState;
   const { cities } = state;
   const render = () => {
-    $app.innerHTML += ` <main>
+    $app.insertAdjacentHTML("beforeend", ` <main>
                 <!-- 3. 그리드(Grid) 디자인을 위해 클래스 이름을 하나 붙여줍니다 -->
                 <div class="city-grid">
                    ${cities
@@ -19,7 +19,7 @@ export default function CityList({ $app, initState }) {
                      )
                      .join("")} 
                 </div>
-            </main>`;
+            </main>`);
   };
 
   render();

@@ -1,10 +1,19 @@
 const API_URL = "https://trip-wiki-api.vercel.app/";
 
-export const requestCities = async (region) => {
-
-  const target = (!region || region === "All") ? "" : region;
+export const requestCities = async (region, sortBy, searchWord) => {
+  const target = !region || region === "All" ? "" : region;
   try {
-    const res = await fetch(`${API_URL}${target}?start=0`);
+    let url = `${API_URL}${target}?start=0`;
+  
+    if (sortBy) {
+      url += `&sort=${sortBy}`;
+    }
+ 
+    if (searchWord) {
+      url += `&search=${searchWord}`;
+    }
+
+    const res = await fetch(url);
 
     if (res.ok) {
       const data = await res.json();
