@@ -25,22 +25,22 @@ export default function RegionList({ $app, initState, handleRegion }) {
       .join("");
 
     $app.insertAdjacentHTML("beforeend", `
-      <nav class="region-list">
+      <nav id="regionNav" class="region-list">
         ${regionButtons}
       </nav>
     `);
-  };
 
-
-  $app.addEventListener("click", (e) => {
-    if (e.target.classList.contains("region-btn")) {
-      const selectionRegion = e.target.id;
-      if (handleRegion) {
-        handleRegion(selectionRegion);
+    // ⭐️ $app 전체가 아니라, 방금 만든 네비게이션(regionNav)에만 센서를 답니다.
+    // 이렇게 하면 화면이 다시 그려질 때 예전 센서는 깔끔하게 삭제되어 중복 실행을 막아줍니다!
+    document.getElementById("regionNav").addEventListener("click", (e) => {
+      if (e.target.classList.contains("region-btn")) {
+        const selectionRegion = e.target.id;
+        if (handleRegion) {
+          handleRegion(selectionRegion);
+        }
       }
-    }
-  });
-
+    });
+  };
 
   render();
 }
