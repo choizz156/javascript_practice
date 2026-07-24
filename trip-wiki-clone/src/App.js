@@ -1,17 +1,20 @@
+import { requestCities } from "./components/api.js";
+import Header from "./components/Header.js";
+import RegionList from "./components/RegionList.js";
+import CityList from "./components/CityList.js";
+
 export default function App($app) {
   let state = {
     currentPage: "/",
+    cities: [],
   };
-  const render = () => {
-    $app.innerHTML = `
-            <div>
-                <h1>Trip Wiki 에 오신 것을 환영합니다!</h1>
-                <h2>현재 주소는: ${state.currentPage} 입니다.</h2>
 
-                <button class="nav-btn" data-path="/seoul">서울로 가기</button>
-                <button class="nav-btn" data-path="/jeju">제주로 가기</button>
-            </div>
-        `;
+  const render = () => {
+    $app.innerHTML = "";
+
+    Header({ $app, initialState: {} });
+    RegionList({ $app, initialState: {} });
+    CityList({ $app, initialState: state.cities });
   };
 
   $app.addEventListener("click", (e) => {
@@ -26,10 +29,17 @@ export default function App($app) {
     }
   });
 
+  // 4. 사용자가 브라우저 '뒤로 가기/앞으로 가기'를 눌렀을 때 화면을 다시 그려주는 센서(popstate)
   window.addEventListener("popstate", () => {
     state.currentPage = window.location.pathname;
     render();
   });
 
-  render();
+  const init = async () => {
+    const citiesData = await requestCities();
+    state.cities = citiesData;
+    render();
+  };
+
+  init();
 }
