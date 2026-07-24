@@ -18,13 +18,15 @@ export default function App($app) {
     Header({ $app, initState: { currentPage } });
     RegionList({
       $app,
-      initState: {},
+      initState: state.region,
       handleRegion: async (region) => {
         history.pushState(null, null, `/${region}`);
         state.region = region;
+        state.cities =  await requestCities(state.region)
         render();
       },
     });
+
     CityList({ $app, initState: cities });
   };
 
@@ -34,8 +36,8 @@ export default function App($app) {
 
       // [마법의 주문] 브라우저 주소창을 path로 쓱 바꿉니다! (절대 새로고침 안 됨)
       history.pushState(null, null, path);
-
       state.currentPage = path;
+
       render();
     }
   });

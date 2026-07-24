@@ -1,4 +1,5 @@
 export default function RegionList({ $app, initState, handleRegion }) {
+  
   let state = initState;
 
   const regionList = [
@@ -30,7 +31,6 @@ export default function RegionList({ $app, initState, handleRegion }) {
     `;
   };
 
-  render();
 
   $app.addEventListener("click", (e) => {
     if (e.target.classList.contains("region-btn")) {
@@ -40,4 +40,7 @@ export default function RegionList({ $app, initState, handleRegion }) {
       }
     }
   });
+
+
+  render();
 }
