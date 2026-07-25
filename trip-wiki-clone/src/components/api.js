@@ -23,3 +23,16 @@ export const requestCities = async (region, sortBy, searchWord) => {
     console.log(error);
   }
 };
+
+export const requestCityDetail = async (cityId) => {
+  try {
+    const res = await fetch(`${API_URL}city/${cityId}`);
+
+    if(res.ok){
+      const data = await res.json();
+      return data.cityDetail;
+    }
+  } catch (error) {
+    console.log(error); 
+  }
+}

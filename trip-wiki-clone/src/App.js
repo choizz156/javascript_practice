@@ -1,7 +1,8 @@
-import { requestCities } from "./components/api.js";
+import { requestCities, requestCityDetail } from "./components/api.js";
 import Header from "./components/Header.js";
 import RegionList from "./components/RegionList.js";
 import CityList from "./components/CityList.js";
+import CityDetail from "./components/CityDetails.js";
 
 export default function App($app) {
   let state = {
@@ -10,6 +11,7 @@ export default function App($app) {
     cities: [],
     sortBy: "total",
     searchWord: "",
+    cityDetail: null,
   };
 
   const render = () => {
@@ -22,27 +24,49 @@ export default function App($app) {
       initState: { currentPage, sortBy, searchWord },
       handleSortChange: async (newSort) => {
         state.sortBy = newSort;
-        state.cities = await requestCities(state.region, state.sortBy, state.searchWord);
+        state.cities = await requestCities(
+          state.region,
+          state.sortBy,
+          state.searchWord,
+        );
         render();
       },
       handleSearch: async (newSearch) => {
         state.searchWord = newSearch;
-        state.cities = await requestCities(state.region, state.sortBy, state.searchWord);
-        render();
-      }
-    });
-    RegionList({
-      $app,
-      initState: state.region,
-      handleRegion: async (region) => {
-        history.pushState(null, null, `/${region}`);
-        state.region = region;
-        state.cities = await requestCities(state.region);
+        state.cities = await requestCities(
+          state.region,
+          state.sortBy,
+          state.searchWord,
+        );
         render();
       },
     });
 
-    CityList({ $app, initState: cities });
+    if (!currentPage.includes("/city/")) {
+      RegionList({
+        $app,
+        initState: state.region,
+        handleRegion: async (region) => {
+          history.pushState(null, null, `/${region}`);
+          state.region = region;
+          state.cities = await requestCities(state.region);
+          render();
+        },
+      });
+
+      CityList({
+        $app,
+        initState: cities,
+        handleItemClick: async (id) => {
+          history.pushState(null, null, `/city/${id}`);
+          state.currentPage = `/city/${id}`;
+          state.cityDetail = await requestCityDetail(id);
+          render();
+        },
+      });
+    } else {
+      CityDetail({ $app, initState: state.cityDetail });
+    }
   };
 
   $app.addEventListener("click", (e) => {
